@@ -1,0 +1,29 @@
+---
+- name: pre install
+  become: true
+  block:
+  - name: install apt-transport-https
+    apt:
+      state: present
+      name: apt-transport-https
+      update_cache: true
+      cache_valid_time: 3600
+
+  - name: add apt gpg key
+    apt_key:
+      state: present
+      keyserver: keyserver.ubuntu.com
+      id: "{{ _apt_repo_key_id }}"
+
+  - name: add repository
+    apt_repository:
+      state: present
+      repo: "{{ _apt_repository }}"
+      filename: osquery
+
+# skip updating cache when adding repository because of errors module is making
+# when updating cache after adding repository
+  - name: update cache after adding osquery repo
+    apt:
+      update_cache: true
+...

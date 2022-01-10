@@ -1,0 +1,42 @@
+{
+    "options": {
+        {% if
+            (_osquery_options is defined)
+            and
+            (_osquery_options | length > 0)
+        -%}
+        {% for k ,v in _osquery_options.items() -%}
+        "{{ k }}": {{ v }}
+        {%- if not loop.last %},{% endif %}
+
+        {% endfor -%}
+        {% else -%}
+        "host_identifier": "hostname"
+        {% endif -%}
+    },
+    {% if
+    (_osquery_schedules is defined)
+    and
+    (_osquery_schedules | length > 0)
+    %}
+    "schedule": {
+        {% for sch in _osquery_schedules -%}
+        "{{ sch.schedule_name }}": {
+            "query": "{{ sch.query }}"
+            {%- if sch.interval is defined -%}
+            ,
+            "interval": {{ sch.interval }}
+            {% endif -%}
+        }
+        {% if not loop.last -%},{% endif -%}
+        {% endfor -%}
+    }{%- endif -%}{% if (_osquery_packs is defined) and (_osquery_packs | length > 0 ) %},
+   "packs": {
+       {% for pack in _osquery_packs -%}
+        "{{ pack.pack_name }}": "/etc/osquery/packs.d/{{ pack.pack_name }}.conf"{% if not loop.last -%},{% endif %}
+
+        {% endfor -%}
+   }
+   {% endif %}
+
+}

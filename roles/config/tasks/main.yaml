@@ -1,0 +1,40 @@
+---
+- name: config
+  become: yes
+  block:
+  - name: copy config and flags file
+    template:
+      src: "{{ item.s }}"
+      dest: "{{ item.d }}"
+      owner: root
+      group: root
+      mode: "0640"
+    loop:
+    - s: 'templates/osquery.conf.j2'
+      d: /etc/osquery/osquery.conf
+    - s: 'templates/osquery.flags.j2'
+      d: /etc/osquery/osquery.flags
+  - name: create packs directory
+    when: _osquery_packs | length 
+    file:
+      state: directory
+      path: /etc/osquery/packs.d
+      owner: root
+      group: root
+      mode: "0750"
+  - name: create packs files
+    when: _osquery_packs | length
+    copy:
+      content: "{{ item.content }}"
+      dest: "/etc/osquery/packs.d/{{ item.pack_name }}.conf"
+      owner: root
+      group: root
+      mode: "0640"
+    loop:
+      "{{ _osquery_packs }}"
+  - name: restart osqueryd service
+    service:
+      name: osqueryd
+      state: restarted
+      enabled: yes
+...

@@ -1,0 +1,5 @@
+---
+# https://osquery.io/downloads/official
+_apt_repo_key_id: '1484120AC4E9F8A1A577AEEE97A80C63C9D8B80B'
+_apt_repository: 'deb [arch=amd64] https://pkg.osquery.io/deb deb main'
+...

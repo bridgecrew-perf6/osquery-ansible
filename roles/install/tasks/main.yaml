@@ -1,0 +1,9 @@
+---
+- name: install
+  become: true
+  block:
+  - name: install osquery package
+    apt:
+      state: present
+      name: osquery
+...

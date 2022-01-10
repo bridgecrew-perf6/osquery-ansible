@@ -1,0 +1,9 @@
+{% if 
+    (_osquery_flags is defined)
+    and
+    (_osquery_flags | length > 0)
+%}
+{% for k, v in  _osquery_flags.items() -%}
+{{ k }}={{ v }}
+{% endfor -%}
+{% endif -%}

@@ -1,0 +1,4 @@
+---
+_osquery_options:
+  host_identifier: '"hostname"'
+...

@@ -1,0 +1,7 @@
+---
+- hosts: v2
+  roles:
+  - role: pre_install
+  - role: install
+  - role: config
+...
